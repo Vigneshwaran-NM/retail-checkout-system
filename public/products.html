@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Checkout System | Product Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-cash-register"></i>
+                <h1>RetailCheck Products</h1>
+            </div>
+            <div class="header-info">
+                <div class="datetime" id="currentDateTime">Loading...</div>
+                <nav>
+                    <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Billing</a>
+                    <a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a href="products.html" class="nav-link active"><i class="fas fa-boxes"></i> Products</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="products-content">
+<!-- ADD PRODUCT FORM -->
+<section class="card add-product-form">
+    <h2><i class="fas fa-plus-circle"></i> Add New Product</h2>
+    <div class="form-grid">
+        <div class="input-group">
+            <label for="newBarcode">Barcode *</label>
+            <input type="text" id="newBarcode" placeholder="e.g., 2001" required>
+        </div>
+        <div class="input-group">
+            <label for="newName">Product Name *</label>
+            <input type="text" id="newName" placeholder="e.g., Premium Tea (100g)" required>
+        </div>
+        <div class="input-group">
+            <label for="newPrice">Price (₹) *</label>
+            <input type="number" id="newPrice" step="0.01" min="0" placeholder="e.g., 120.00" required>
+        </div>
+        <div class="input-group">
+            <label for="newExpiryDate">Expiry Date (Optional)</label>
+            <input type="date" id="newExpiryDate" placeholder="YYYY-MM-DD">
+            <small class="hint">Leave empty for non-perishable items</small>
+        </div>
+        <div class="form-actions">
+            <button id="addProductBtn" class="btn btn-success">
+                <i class="fas fa-save"></i> Add Product
+            </button>
+            <button id="clearFormBtn" class="btn btn-outline">
+                <i class="fas fa-times"></i> Clear Form
+            </button>
+        </div>
+    </div>
+    <div id="addProductMessage" class="message"></div>
+</section>
+<!-- PRODUCTS LIST -->
+<section class="card products-list">
+    <div class="section-header">
+    <h2><i class="fas fa-list"></i> All Products</h2>
+    <div class="filter-controls">
+        <div class="search-box">
+            <input type="text" id="productSearch" placeholder="Search products...">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="filter-dropdown">
+            <select id="expiryFilter">
+                <option value="all">All Products</option>
+                <option value="expired">Expired</option>
+                <option value="urgent">Expiring Soon (≤7 days)</option>
+                <option value="warning">Expiring (≤30 days)</option>
+                <option value="ok">Not Expiring Soon</option>
+                <option value="non-perishable">Non-Perishable</option>
+            </select>
+        </div>
+    </div>
+</div>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Barcode</th>
+                    <th>Product Name</th>
+                    <th>Price (₹)</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
+                    <th>Created Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productsTable">
+                <tr>
+                    <td colspan="7" class="empty-data">Loading products...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<div class="table-footer">
+    <div class="bulk-actions">
+        <button id="bulkUpdateExpiry" class="btn btn-warning">
+            <i class="fas fa-calendar-alt"></i> Bulk Update Expiry
+        </button>
+    </div>
+    <div class="summary-info" id="productCount">0 products</div>
+    <button id="refreshProducts" class="btn btn-primary">
+        <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+</div>
+</section>
+        </main>
+
+        <footer class="footer">
+            <p>Retail Checkout System • Product Management</p>
+        </footer>
+    </div>
+<!-- BULK EXPIRY UPDATE MODAL -->
+<div class="modal" id="bulkExpiryModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-calendar-alt"></i> Bulk Update Expiry Dates</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="bulk-update-info">
+                <p>Update expiry dates for multiple products at once.</p>
+                <div class="input-group">
+                    <label for="bulkExpiryDate">New Expiry Date</label>
+                    <input type="date" id="bulkExpiryDate">
+                </div>
+                <div class="selected-products" id="selectedProductsList">
+                    <h4>Selected Products (0):</h4>
+                    <div class="products-list" id="bulkProductsList">
+                        <!-- Selected products will appear here -->
+                    </div>
+                </div>
+                <div class="select-all">
+                    <label>
+                        <input type="checkbox" id="selectAllProducts">
+                        Select all products in current view
+                    </label>
+                </div>
+            </div>
+            <div id="bulkUpdateMessage" class="message"></div>
+        </div>
+        <div class="modal-footer">
+            <button id="applyBulkUpdate" class="btn btn-success">
+                <i class="fas fa-check"></i> Apply to Selected
+            </button>
+            <button id="closeBulkModal" class="btn btn-outline">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal" id="editProductModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-edit"></i> Edit Product</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label for="editBarcode">Barcode</label>
+                <input type="text" id="editBarcode" readonly>
+            </div>
+            <div class="input-group">
+                <label for="editName">Product Name</label>
+                <input type="text" id="editName">
+            </div>
+            <div class="input-group">
+                <label for="editPrice">Price (₹)</label>
+                <input type="number" id="editPrice" step="0.01" min="0">
+            </div>
+            <div class="input-group">
+                <label for="editExpiryDate">Expiry Date</label>
+                <input type="date" id="editExpiryDate">
+                <small class="hint">Leave empty for non-perishable items</small>
+            </div>
+            <div id="editProductMessage" class="message"></div>
+        </div>
+        <div class="modal-footer">
+            <button id="updateProductBtn" class="btn btn-success">
+                <i class="fas fa-check"></i> Update Product
+            </button>
+            <button id="deleteProductBtn" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete Product
+            </button>
+            <button id="closeEditModalBtn" class="btn btn-outline">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+    <script src="fix-currency.js"></script>
+    <script src="products.js"></script>
+</body>
+</html>

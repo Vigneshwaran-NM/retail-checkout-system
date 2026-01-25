@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Checkout System | Sales Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-cash-register"></i>
+                <h1>RetailCheck Dashboard</h1>
+            </div>
+            <div class="header-info">
+                <div class="datetime" id="currentDateTime">Loading...</div>
+                <nav>
+    <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Billing</a>
+    <a href="dashboard.html" class="nav-link avtive"><i class="fas fa-chart-line"></i> Dashboard</a>
+    <a href="products.html" class="nav-link"><i class="fas fa-boxes"></i> Products</a>
+</nav>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <!-- DATE SELECTOR -->
+            <section class="card date-selector">
+                <h2><i class="fas fa-calendar-alt"></i> Select Date Range</h2>
+                <div class="date-controls">
+                    <div class="input-group">
+                        <label for="startDate">From Date</label>
+                        <input type="date" id="startDate" value="">
+                    </div>
+                    <div class="input-group">
+                        <label for="endDate">To Date</label>
+                        <input type="date" id="endDate" value="">
+                    </div>
+                    <button id="applyDateRange" class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Apply Filter
+                    </button>
+                    <button id="resetDateRange" class="btn btn-outline">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+                <div class="quick-date-buttons">
+                    <button class="btn-small" data-days="1">Today</button>
+                    <button class="btn-small" data-days="7">Last 7 Days</button>
+                    <button class="btn-small" data-days="30">Last 30 Days</button>
+                    <button class="btn-small" data-days="90">Last Quarter</button>
+                </div>
+            </section>
+
+            <!-- SALES SUMMARY CARDS -->
+<section class="card summary-cards">
+    <h2><i class="fas fa-chart-pie"></i> Sales Summary</h2>
+    <div class="cards-grid" id="summaryCards">
+        <div class="summary-card">
+            <div class="card-icon">
+                <i class="fas fa-rupee-sign"></i>
+            </div>
+            <div class="card-content">
+                <h3 id="totalSales">₹0.00</h3>
+                <p>Total Sales</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="card-icon">
+                <i class="fas fa-receipt"></i>
+            </div>
+            <div class="card-content">
+                <h3 id="totalBills">0</h3>
+                <p>Bills Generated</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="card-icon">
+                <i class="fas fa-tag"></i>
+            </div>
+            <div class="card-content">
+                <h3 id="totalDiscount">₹0.00</h3>
+                <p>Discount Given</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="card-icon">
+                <i class="fas fa-shopping-basket"></i>
+            </div>
+            <div class="card-content">
+                <h3 id="totalItems">0</h3>
+                <p>Items Sold</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- NEAR-EXPIRY PROMOTIONS WIDGET -->
+<section class="card expiry-promotions">
+    <div class="section-header">
+        <h2><i class="fas fa-clock"></i> Near-Expiry Promotions</h2>
+        <div class="header-actions">
+            <button id="refreshPromotions" class="btn-small btn-primary">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            <button id="generateAllStickers" class="btn-small btn-success">
+                <i class="fas fa-print"></i> Print All Stickers
+            </button>
+        </div>
+    </div>
+    <div class="promotions-grid" id="promotionsGrid">
+        <div class="loading-promotions">
+            <i class="fas fa-spinner fa-spin"></i> Loading promotion suggestions...
+        </div>
+    </div>
+    <div class="promo-stats">
+        <div class="stat-item">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Items near expiry: <strong id="nearExpiryCount">0</strong></span>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-tag"></i>
+            <span>Promotions suggested: <strong id="promoCount">0</strong></span>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Potential savings: <strong id="potentialSavings">₹0</strong></span>
+        </div>
+    </div>
+</section>
+            <!-- CHARTS -->
+            <div class="charts-row">
+                <section class="card chart-card">
+                    <h2><i class="fas fa-chart-bar"></i> Sales Trend (Amount vs Date)</h2>
+                    <div class="chart-container">
+                        <canvas id="salesTrendChart"></canvas>
+                    </div>
+                </section>
+                
+                <section class="card chart-card">
+                    <h2><i class="fas fa-chart-bar"></i> Top Selling Items (Quantity)</h2>
+                    <div class="chart-container">
+                        <canvas id="topItemsChart"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <!-- RECENT BILLS TABLE -->
+            <section class="card recent-bills">
+                <h2><i class="fas fa-history"></i> Recent Bills</h2>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Bill No.</th>
+                                <th>Date & Time</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Discount</th>
+                                <th>Final Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentBillsTable">
+                            <tr>
+                                <td colspan="6" class="empty-data">No bills found for selected period.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <button id="refreshData" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                    <div class="summary-info" id="summaryInfo">
+                        Showing last 50 bills
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Retail Checkout System Dashboard • Data updates in real-time</p>
+        </footer>
+    </div>
+    <script src="fix-currency.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "retail-checkout-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+"scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js",
+  "init-db": "node scripts/init-db.js",
+  "update-db": "node scripts/add-expiry-field.js",
+  "check-expiry": "node scripts/check-expiry.js"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
