@@ -1,9 +1,9 @@
 # 🛒 Retail Store Checkout & Billing System
 
-A **complete digital billing solution** for small retail stores to replace manual billing registers. This offline-first system provides fast billing, sales analytics, smart promotions, and voice-guided operations - all designed for the Indian retail environment.
+A **complete offline-first digital billing solution** for small and medium retail stores, designed to replace manual billing registers.  
+The system provides **fast checkout**, **sales analytics**, **smart promotions**, and **voice-guided billing**, optimized for the Indian retail environment.
 
-![Dashboard Screenshot](https://via.placeholder.com/800x450/2c3e50/ffffff?text=RetailCheck+Dashboard)
-*Screenshot of the Sales Dashboard*
+> Built to be lightweight, reliable, and usable even without internet connectivity.
 
 ## ✨ Key Features
 
@@ -237,22 +237,15 @@ We welcome contributions! Here's how you can help:
 - Update documentation for new features
 - Test thoroughly before submitting
 
----
-
 ## 👥 Team
-
 **Team Name:** Yantramanav 2.0  
-**College:** Prathyusha Engineering College 
-**Hackathon:** Naandi Foundation - Problem A Solution  
+**College:** Prathyusha Engineering College  
+**Hackathon:** Naandi Foundation - Problem A Solution
 
 ## 📄 License
-
-This project is licensed under the **MIT License**.  
-See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
-
 ### 👤 Author
 **Vigneshwaran NM**
-
----
+```
